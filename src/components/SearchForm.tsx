@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,7 +34,7 @@ export const formSchema = z.object({
   rooms: z.string().min(1, {
     message: "Please select at least 1 room",
   }),
-  children: z.string().min(1, {
+  children: z.string().min(0, {
     message: "Please select at least 1 room",
   }),
 });
@@ -53,7 +52,29 @@ const SearchForm = () => {
       
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  function onSubmit(values: z.infer<typeof formSchema>) {
+
+const checkin_monthday = values.dates.from.getDate().toString();
+const checkin_month = (values.dates.from.getMonth()+1).toString();
+const checkin_year= values.dates.to.getFullYear().toString();
+const checkout_monthday = values.dates.to.getDate().toString();
+const checkout_month = (values.dates.to.getMonth()+1).toString();
+const checkout_year = values.dates.to.getFullYear().toString();
+
+const checkin = `${checkin_year}-${checkin_month}-${checkin_monthday}`
+const checkout= `${checkout_year}-${checkout_month}-${checkout_monthday}`
+const location = values.location;
+
+const url = new URL('https://www.booking.com/searchresults.html');
+url.searchParams.set('ss', location);
+url.searchParams.set('group_adults', values.adults);
+url.searchParams.set('group_children', values.children);
+url.searchParams.set('no_rooms', values.rooms)
+url.searchParams.set('checkin', checkin);
+url.searchParams.set('checkout', checkout);
+
+router.push(`/search?url=${url.href}`)
+  }
 
   return (
     <Form {...form}>
@@ -65,6 +86,7 @@ const SearchForm = () => {
           <FormField
             control={form.control}
             name="location"
+           
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-white flex">
@@ -75,7 +97,7 @@ const SearchForm = () => {
                 <FormMessage />
 
                 <FormControl>
-                  <Input className="bg-white rounded-xl" placeholder="London, UK" {...field} />
+                  <Input className="bg-white text-gray-500 rounded-xl" placeholder="London, UK" {...field} />
                 </FormControl>
               </FormItem>
             )}
@@ -143,6 +165,7 @@ const SearchForm = () => {
             )}
           />
         </div>
+      
         <div className="flex w-full items-center space-x-2">
 <div className="grid items-center flex-1">
 <FormField control={form.control} 
@@ -157,13 +180,13 @@ render={({field}) => (
     </FormItem>
 )}/>
 </div>
-        </div>
+   
      
 <div className="grid items-center flex-1">
 <FormField control={form.control} 
 name='children'
 render={({field}) => (
-    <FormItem className="flex flex-col bg">
+    <FormItem className="flex flex-col ">
         <FormLabel className="text-white">Children</FormLabel>
         <FormMessage />
         <FormControl>
@@ -187,6 +210,10 @@ render={({field}) => (
     </FormItem>
 )}/>
 </div>
+<div className="mt-auto">
+  <Button type="submit" className="bg-blue-500 text-base rounded-xl text-white p-5 hover:bg-blue-700">Search</Button>
+</div>
+     </div>  
         
       </form>
     </Form>

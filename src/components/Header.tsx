@@ -91,14 +91,14 @@ const Header = () => {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute bg-white -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl shadow-lg ring-1 ring-gray-900/5">
-                <div className="p-4">
+                <div className="p-4 ">
                   {products.map((product) => (
                     <div
                       key={product.name}
-                      className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                      className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-200 "
                     >
                       <div className="flex h-11 w-11 flex:none items-ceter justify-center rounded-lg bg-gray-50 group-hover:bg-gray-200">
-                        <product.icon className="h-6 w-6 text-[#013B94] group:hover:text-blue-600" />
+                        <product.icon className="h-6 w-6 text-[#013B94] hover:group text-blue-600" />
                       </div>
                       <div className="flex-auto">
                         <a
